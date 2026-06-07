@@ -1,0 +1,37 @@
+# =============================================================
+# Wiki CODANOR — Docker Compose
+# Base de Conocimiento IA Local con Open WebUI + Ollama
+# =============================================================
+# Uso:
+#   docker compose up -d        (arrancar en segundo plano)
+#   docker compose down          (parar)
+#   docker compose logs -f       (ver logs)
+#   docker compose pull          (actualizar Open WebUI)
+# =============================================================
+
+services:
+  open-webui:
+    image: ghcr.io/open-webui/open-webui:main
+    container_name: wiki-codanor
+    ports:
+      - "3000:8080"
+    volumes:
+      - ./vectordb:/app/backend/data
+    environment:
+      # Conexion a Ollama local (ya instalado en macOS)
+      - OLLAMA_BASE_URL=http://host.docker.internal:11434
+      # Autenticacion
+      - WEBUI_AUTH=true
+      # RAG - Embeddings
+      - RAG_EMBEDDING_MODEL=nomic-embed-text
+      - RAG_EMBEDDING_ENGINE=ollama
+      # RAG - Chunking
+      - CHUNK_SIZE=1000
+      - CHUNK_OVERLAP=100
+      # Interfaz
+      - WEBUI_NAME=Wiki CODANOR
+    restart: unless-stopped
+
+# Nota: Ollama NO se incluye aqui porque ya esta instalado
+# nativamente en macOS. El contenedor se conecta via
+# host.docker.internal:11434

@@ -1,0 +1,1069 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Proyecto Wiki CODANOR &mdash; Base de Conocimiento IA Local</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Nunito+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #0088CC;
+      --primary-dark: #006BA6;
+      --primary-light: #e8f4fa;
+      --accent: #12A79D;
+      --accent-light: #e6f7f6;
+      --dark: #1a1a2e;
+      --gray-900: #2d2d44;
+      --gray-700: #4a4a5a;
+      --gray-500: #7a7a8a;
+      --gray-300: #c4c4d0;
+      --gray-100: #f0f0f5;
+      --white: #ffffff;
+      --danger: #e74c3c;
+      --warning: #f39c12;
+      --success: #12A79D;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Century Gothic', 'Avenir', 'Trebuchet MS', 'Nunito Sans', sans-serif;
+      color: var(--gray-700);
+      line-height: 1.7;
+      background: var(--gray-100);
+    }
+
+    /* ===== PORTADA ===== */
+    .cover-page {
+      min-height: 100vh;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 40%, var(--dark) 100%);
+      display: flex; flex-direction: column;
+      justify-content: center; align-items: center;
+      text-align: center; color: var(--white);
+      position: relative; overflow: hidden; padding: 2rem;
+    }
+    .cover-page::before {
+      content: '';
+      position: absolute; top: -50%; left: -50%;
+      width: 200%; height: 200%;
+      background: radial-gradient(ellipse at 30% 50%, rgba(18,167,157,0.15) 0%, transparent 60%),
+                  radial-gradient(ellipse at 70% 20%, rgba(0,136,204,0.1) 0%, transparent 50%);
+      animation: coverFloat 20s ease-in-out infinite;
+    }
+    @keyframes coverFloat {
+      0%, 100% { transform: translate(0,0); }
+      50% { transform: translate(-2%,2%); }
+    }
+    .cover-content { position: relative; z-index: 1; max-width: 700px; }
+    .cover-logo { width: 220px; margin-bottom: 2rem; filter: brightness(0) invert(1); }
+    .cover-divider { width: 80px; height: 4px; background: var(--accent); margin: 1.5rem auto; border-radius: 2px; }
+    .cover-title {
+      font-family: 'Poppins', 'Century Gothic', sans-serif;
+      font-size: 3rem; font-weight: 700;
+      letter-spacing: -0.5px; margin-bottom: 0.5rem;
+    }
+    .cover-subtitle {
+      font-family: 'Poppins', 'Century Gothic', sans-serif;
+      font-size: 1.4rem; font-weight: 300;
+      opacity: 0.9; margin-bottom: 1rem;
+    }
+    .cover-badge {
+      display: inline-block; background: var(--accent);
+      color: var(--white); padding: 0.5rem 1.5rem;
+      border-radius: 50px; font-size: 0.9rem;
+      font-weight: 600; margin-top: 2rem; letter-spacing: 0.5px;
+    }
+    .cover-footer {
+      position: absolute; bottom: 2rem;
+      left: 0; right: 0; text-align: center; z-index: 1;
+    }
+    .cover-footer p { font-size: 0.85rem; opacity: 0.5; }
+
+    /* ===== NAVEGACION LATERAL ===== */
+    .manual-container { display: flex; min-height: 100vh; }
+
+    .sidebar {
+      width: 300px; background: var(--white);
+      border-right: 1px solid var(--gray-300);
+      position: fixed; top: 0; left: 0;
+      height: 100vh; overflow-y: auto;
+      z-index: 100; padding: 1.5rem 0;
+    }
+    .sidebar-header {
+      padding: 0 1.5rem 1.5rem;
+      border-bottom: 1px solid var(--gray-100);
+      margin-bottom: 1rem;
+    }
+    .sidebar-logo { width: 140px; }
+    .sidebar-label {
+      font-family: 'Poppins', 'Century Gothic', sans-serif;
+      font-size: 0.7rem; font-weight: 600;
+      text-transform: uppercase; letter-spacing: 1.5px;
+      color: var(--gray-500); padding: 1rem 1.5rem 0.5rem;
+    }
+    .sidebar nav ul { list-style: none; }
+    .sidebar nav ul li a {
+      display: flex; align-items: center; gap: 0.5rem;
+      padding: 0.45rem 1.5rem; color: var(--gray-700);
+      text-decoration: none; font-size: 0.88rem;
+      transition: all 0.2s; border-left: 3px solid transparent;
+    }
+    .sidebar nav ul li a:hover {
+      background: var(--primary-light); color: var(--primary);
+      border-left-color: var(--primary);
+    }
+    .sidebar nav ul li a .icon {
+      width: 16px; height: 16px; flex-shrink: 0; opacity: 0.6;
+    }
+    .sidebar nav ul li a:hover .icon { opacity: 1; }
+
+    /* ===== CONTENIDO PRINCIPAL ===== */
+    .main-content {
+      margin-left: 300px; flex: 1;
+      padding: 3rem 4rem; max-width: 960px;
+    }
+
+    /* ===== TIPOGRAFIA ===== */
+    h1, h2, h3, h4, h5, h6 { font-family: 'Poppins', 'Century Gothic', sans-serif; color: var(--dark); }
+    h1 {
+      font-size: 2.2rem; font-weight: 700;
+      margin-bottom: 0.5rem; padding-bottom: 0.75rem;
+      border-bottom: 3px solid var(--primary); display: inline-block;
+    }
+    h2 {
+      font-size: 1.6rem; font-weight: 600;
+      margin-top: 3rem; margin-bottom: 1rem;
+      color: var(--primary); display: flex;
+      align-items: center; gap: 0.5rem;
+    }
+    h2::before {
+      content: ''; width: 4px; height: 28px;
+      background: var(--accent); border-radius: 2px; flex-shrink: 0;
+    }
+    h3 {
+      font-size: 1.25rem; font-weight: 600;
+      margin-top: 2rem; margin-bottom: 0.75rem; color: var(--gray-900);
+    }
+    p { margin-bottom: 1rem; }
+    .chapter-intro { font-size: 1.05rem; color: var(--gray-500); margin-bottom: 2rem; }
+
+    /* ===== BADGES ===== */
+    .badge {
+      display: inline-block; font-size: 0.7rem;
+      font-family: 'Poppins', sans-serif; font-weight: 600;
+      padding: 0.15rem 0.6rem; border-radius: 50px;
+      text-transform: uppercase; letter-spacing: 0.5px;
+      vertical-align: middle; margin-left: 0.5rem;
+    }
+    .badge-private { background: var(--danger); color: var(--white); }
+    .badge-public { background: var(--success); color: var(--white); }
+    .badge-future { background: var(--warning); color: var(--white); }
+    .badge-done { background: var(--success); color: var(--white); }
+
+    /* ===== SECCIONES ===== */
+    .section { margin-bottom: 3rem; padding-top: 1rem; }
+
+    /* ===== TABLAS ===== */
+    table {
+      width: 100%; border-collapse: collapse;
+      margin: 1.5rem 0; font-size: 0.9rem;
+      border-radius: 8px; overflow: hidden;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    }
+    thead { background: var(--primary); color: var(--white); }
+    th {
+      font-family: 'Poppins', 'Century Gothic', sans-serif; font-weight: 600;
+      padding: 0.85rem 1rem; text-align: left;
+      font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.5px;
+    }
+    td { padding: 0.75rem 1rem; border-bottom: 1px solid var(--gray-100); background: var(--white); }
+    tbody tr:hover td { background: var(--primary-light); }
+    tbody tr:last-child td { border-bottom: none; }
+
+    /* ===== CODIGO ===== */
+    code {
+      font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+      font-size: 0.85rem; background: var(--gray-100);
+      color: var(--primary-dark); padding: 0.15rem 0.45rem; border-radius: 4px;
+    }
+    pre {
+      background: var(--dark); color: #e0e0e0;
+      padding: 1.25rem 1.5rem; border-radius: 8px;
+      overflow-x: auto; margin: 1rem 0 1.5rem;
+      font-size: 0.85rem; line-height: 1.6;
+      border-left: 4px solid var(--accent);
+    }
+    pre code { background: none; color: inherit; padding: 0; }
+
+    /* ===== ALERTAS ===== */
+    .alert {
+      padding: 1rem 1.25rem; border-radius: 8px;
+      margin: 1.25rem 0; font-size: 0.9rem; border-left: 4px solid;
+    }
+    .alert-info { background: var(--primary-light); border-color: var(--primary); color: var(--primary-dark); }
+    .alert-warning { background: #fef9e7; border-color: var(--warning); color: #7d6608; }
+    .alert-danger { background: #fdedec; border-color: var(--danger); color: #922b21; }
+    .alert-success { background: var(--accent-light); border-color: var(--accent); color: #0e7a72; }
+    .alert-title { font-family: 'Poppins', sans-serif; font-weight: 600; margin-bottom: 0.25rem; }
+
+    /* ===== LISTAS ===== */
+    ul, ol { padding-left: 1.5rem; margin-bottom: 1rem; }
+    li { margin-bottom: 0.4rem; }
+
+    /* ===== CARDS ===== */
+    .card-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 1rem; margin: 1.5rem 0;
+    }
+    .card {
+      background: var(--white); border: 1px solid var(--gray-300);
+      border-radius: 8px; padding: 1.25rem; transition: all 0.2s;
+    }
+    .card:hover { border-color: var(--primary); box-shadow: 0 4px 12px rgba(0,136,204,0.1); }
+    .card h4 { font-size: 1rem; margin-bottom: 0.5rem; color: var(--primary); }
+    .card p { font-size: 0.85rem; color: var(--gray-500); margin-bottom: 0; }
+
+    /* ===== STEP LIST ===== */
+    .step-list { counter-reset: step; list-style: none; padding-left: 0; }
+    .step-list li {
+      counter-increment: step; padding: 1rem 1rem 1rem 3.5rem;
+      position: relative; margin-bottom: 0.75rem;
+      background: var(--white); border-radius: 8px;
+      border: 1px solid var(--gray-100);
+    }
+    .step-list li::before {
+      content: counter(step); position: absolute;
+      left: 1rem; top: 1rem; width: 28px; height: 28px;
+      background: var(--primary); color: var(--white);
+      border-radius: 50%; display: flex; align-items: center;
+      justify-content: center; font-family: 'Poppins', sans-serif;
+      font-weight: 600; font-size: 0.8rem;
+    }
+
+    /* ===== DIAGRAMA ASCII ===== */
+    .diagram-box {
+      background: var(--white); border: 2px solid var(--primary);
+      border-radius: 12px; padding: 2rem; margin: 1.5rem 0;
+      text-align: center; font-family: 'SF Mono', 'Consolas', monospace;
+      font-size: 0.85rem; line-height: 2; color: var(--gray-900);
+      overflow-x: auto;
+    }
+    .diagram-box .arrow { color: var(--accent); font-weight: 700; font-size: 1.1rem; }
+    .diagram-box .component { 
+      display: inline-block; background: var(--primary-light);
+      border: 1px solid var(--primary); border-radius: 6px;
+      padding: 0.3rem 0.8rem; margin: 0.25rem; font-weight: 600;
+    }
+
+    /* ===== BOTON PDF ===== */
+    .btn-print {
+      position: fixed; bottom: 2rem; right: 2rem;
+      background: var(--primary); color: var(--white);
+      border: none; padding: 0.75rem 1.5rem;
+      border-radius: 50px; font-family: 'Poppins', 'Century Gothic', sans-serif;
+      font-size: 0.9rem; font-weight: 600; cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0,136,204,0.3);
+      transition: all 0.2s; z-index: 200;
+      display: flex; align-items: center; gap: 0.5rem;
+    }
+    .btn-print:hover { background: var(--primary-dark); transform: translateY(-2px); }
+    .btn-print svg { width: 18px; height: 18px; }
+
+    /* ===== PRINT / PDF ===== */
+    @media print {
+      @page { size: A4; margin: 2cm 1.5cm; }
+      @page :first { margin-top: 0; }
+      body { background: white; font-size: 11pt; }
+      .sidebar, .btn-print { display: none !important; }
+      .main-content { margin-left: 0; padding: 0; max-width: 100%; }
+      .cover-page {
+        page-break-after: always; min-height: 100vh;
+        -webkit-print-color-adjust: exact; print-color-adjust: exact;
+      }
+      .section { page-break-inside: avoid; page-break-before: auto; }
+      h1 { page-break-after: avoid; }
+      h2, h3 { page-break-after: avoid; }
+      pre { white-space: pre-wrap; word-break: break-all; font-size: 9pt; }
+      table { font-size: 9pt; }
+      .alert, .card { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      .card-grid { grid-template-columns: 1fr 1fr; }
+      a { color: var(--primary); text-decoration: none; }
+      hr { page-break-after: always; border: none; height: 0; margin: 0; }
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 900px) {
+      .sidebar { display: none; }
+      .main-content { margin-left: 0; padding: 2rem 1.5rem; }
+      .cover-title { font-size: 2rem; }
+      .card-grid { grid-template-columns: 1fr; }
+      .btn-print { bottom: 1rem; right: 1rem; padding: 0.6rem 1.2rem; font-size: 0.8rem; }
+    }
+
+    /* ===== SCROLLBAR ===== */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--gray-100); }
+    ::-webkit-scrollbar-thumb { background: var(--gray-300); border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--primary); }
+
+    hr { border: none; height: 1px; background: var(--gray-300); margin: 2.5rem 0; }
+
+    /* ===== FOOTER ===== */
+    .manual-footer {
+      margin-top: 4rem; padding: 2rem 0;
+      border-top: 2px solid var(--gray-300);
+      text-align: center; color: var(--gray-500); font-size: 0.85rem;
+    }
+    .manual-footer img { width: 100px; margin-bottom: 0.5rem; }
+  </style>
+</head>
+<body>
+
+<!-- ======================================================================
+     PORTADA
+     ====================================================================== -->
+<div class="cover-page">
+  <div class="cover-content">
+    <img src="https://codanor.com/assets/img/logo-light.png" alt="Logo CODANOR" class="cover-logo">
+    <div class="cover-divider"></div>
+    <h1 class="cover-title">Proyecto Wiki CODANOR</h1>
+    <p class="cover-subtitle">Base de Conocimiento IA Local</p>
+    <div class="cover-badge">Versi&oacute;n 1.0 &bull; Abril 2026</div>
+  </div>
+  <div class="cover-footer">
+    <p>Jafa, S.L. &mdash; CODANOR &bull; Barcelona, Catalunya</p>
+  </div>
+</div>
+
+<!-- ======================================================================
+     CONTENEDOR PRINCIPAL
+     ====================================================================== -->
+<div class="manual-container">
+
+  <!-- ===== SIDEBAR ===== -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <img src="https://codanor.com/assets/img/logo-light.png" alt="Logo CODANOR sidebar" class="sidebar-logo">
+    </div>
+    <div class="sidebar-label">Cap&iacute;tulos</div>
+    <nav>
+      <ul>
+        <li><a href="#cap1">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+          1. Resumen Ejecutivo</a></li>
+        <li><a href="#cap2">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+          2. Objetivos</a></li>
+        <li><a href="#cap3">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+          3. Arquitectura</a></li>
+        <li><a href="#cap4">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg>
+          4. Componentes T&eacute;cnicos</a></li>
+        <li><a href="#cap5">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>
+          5. Estructura de Conocimiento</a></li>
+        <li><a href="#cap6">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+          6. Seguridad y RGPD</a></li>
+        <li><a href="#cap7">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+          7. Fuentes OSINT</a></li>
+        <li><a href="#cap8">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="8" rx="2"/><rect x="2" y="14" width="20" height="8" rx="2"/><circle cx="6" cy="6" r="1"/><circle cx="6" cy="18" r="1"/></svg>
+          8. Requisitos e Infraestructura</a></li>
+        <li><a href="#cap9">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          9. Plan de Implementaci&oacute;n</a></li>
+        <li><a href="#cap10">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg>
+          10. Vinculaci&oacute;n Proyectos</a></li>
+        <li><a href="#cap11">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+          11. Mantenimiento</a></li>
+        <li><a href="#cap12">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
+          12. Anexo: Comandos</a></li>
+      </ul>
+    </nav>
+  </aside>
+
+  <!-- ===== CONTENIDO ===== -->
+  <main class="main-content">
+
+    <!-- ============================================================
+         CAPITULO 1 - RESUMEN EJECUTIVO
+         ============================================================ -->
+    <div id="cap1" class="section">
+      <h1>1. Resumen Ejecutivo</h1>
+      <p class="chapter-intro">Visi&oacute;n general del proyecto Wiki CODANOR y su prop&oacute;sito estrat&eacute;gico.</p>
+
+      <h3>&iquest;Qu&eacute; es?</h3>
+      <p>Wiki CODANOR es un sistema <strong>RAG (Retrieval-Augmented Generation)</strong> local que centraliza el conocimiento generado por los 10 proyectos de consultor&iacute;a de CODANOR. Permite realizar consultas en lenguaje natural sobre normativas, actas, plantillas y documentaci&oacute;n t&eacute;cnica sin necesidad de enviar ning&uacute;n dato a la nube.</p>
+
+      <h3>&iquest;Por qu&eacute;?</h3>
+      <p>El objetivo principal es <strong>reforzar las consultas de IA con documentos propios</strong>: normativas vigentes, pol&iacute;ticas internas de clientes, actas de reuni&oacute;n y gu&iacute;as t&eacute;cnicas. Todo permanece en infraestructura local (NAS Synology + Mac), garantizando la m&aacute;xima privacidad.</p>
+
+      <h3>Beneficios clave</h3>
+      <div class="card-grid">
+        <div class="card">
+          <h4>Privacidad total</h4>
+          <p>Los datos de clientes nunca salen del hardware local. Sin APIs externas, sin telemetr&iacute;a.</p>
+        </div>
+        <div class="card">
+          <h4>Coste cero</h4>
+          <p>Modelos open-source (Ollama), almacenamiento en NAS existente, sin suscripciones.</p>
+        </div>
+        <div class="card">
+          <h4>Funciona offline</h4>
+          <p>Una vez configurado, el sistema opera sin conexi&oacute;n a Internet.</p>
+        </div>
+        <div class="card">
+          <h4>RGPD compliant</h4>
+          <p>Cumplimiento normativo por dise&ntilde;o: datos personales procesados exclusivamente en local.</p>
+        </div>
+      </div>
+    </div>
+
+    <hr>
+
+    <!-- ============================================================
+         CAPITULO 2 - OBJETIVOS
+         ============================================================ -->
+    <div id="cap2" class="section">
+      <h1>2. Objetivos del Proyecto</h1>
+      <p class="chapter-intro">Metas concretas que persigue la implementaci&oacute;n de la Wiki.</p>
+
+      <ol class="step-list">
+        <li><strong>Crear una base de conocimiento unificada</strong> alimentada por normativas (ENS, ISO 27001, LOPD-RGPD, NIS2), documentos de clientes y fuentes OSINT p&uacute;blicas.</li>
+        <li><strong>Vincular con las 10 plataformas existentes</strong> de CODANOR, permitiendo consultas cruzadas entre proyectos.</li>
+        <li><strong>Funcionar como Wiki-personal consultable</strong> mediante interfaz web (Open WebUI), accesible desde cualquier dispositivo en la red local.</li>
+        <li><strong>Integrar con OpenCode v&iacute;a MCP</strong> (fase futura), conectando la base de conocimiento directamente con el entorno de desarrollo.</li>
+      </ol>
+
+      <div class="alert alert-info">
+        <div class="alert-title">Nota</div>
+        La integraci&oacute;n MCP con OpenCode est&aacute; planificada como Fase 4. El sistema es completamente funcional sin ella.
+      </div>
+    </div>
+
+    <hr>
+
+    <!-- ============================================================
+         CAPITULO 3 - ARQUITECTURA
+         ============================================================ -->
+    <div id="cap3" class="section">
+      <h1>3. Arquitectura del Sistema</h1>
+      <p class="chapter-intro">Diagrama de componentes y flujo de datos del sistema RAG local.</p>
+
+      <h3>Diagrama de componentes</h3>
+      <div class="diagram-box">
+        <span class="component">NAS Synology</span>
+        <span class="arrow"> &xrarr; </span>
+        <span class="component">Mac (Motor Inferencia + Vectores)</span>
+        <span class="arrow"> &xrarr; </span>
+        <span class="component">Open WebUI (Interfaz)</span>
+        <br><br>
+        <small style="color: var(--gray-500);">Almacenamiento &nbsp;&nbsp;&nbsp;&bull;&nbsp;&nbsp;&nbsp; Procesamiento &nbsp;&nbsp;&nbsp;&bull;&nbsp;&nbsp;&nbsp; Consulta</small>
+      </div>
+
+      <h3>Componentes principales</h3>
+      <ul>
+        <li><strong>Ollama</strong> &mdash; Motor LLM local que ejecuta los modelos de lenguaje.</li>
+        <li><strong>nomic-embed-text</strong> &mdash; Modelo de embeddings para vectorizar documentos.</li>
+        <li><strong>Open WebUI</strong> &mdash; Interfaz web con soporte RAG nativo y gesti&oacute;n de Knowledge Bases.</li>
+        <li><strong>ChromaDB</strong> &mdash; Base de datos vectorial (integrada en Open WebUI).</li>
+        <li><strong>Docker</strong> &mdash; Contenedores para aislar servicios.</li>
+      </ul>
+
+      <h3>Flujo de datos</h3>
+      <div class="diagram-box">
+        <span class="component">Documentos (NAS)</span>
+        <span class="arrow"> &rarr; </span>
+        <span class="component">Embeddings (nomic-embed-text)</span>
+        <span class="arrow"> &rarr; </span>
+        <span class="component">Vectores (ChromaDB)</span>
+        <span class="arrow"> &rarr; </span>
+        <span class="component">Consulta + LLM</span>
+        <span class="arrow"> &rarr; </span>
+        <span class="component">Respuesta</span>
+      </div>
+    </div>
+
+    <hr>
+
+    <!-- ============================================================
+         CAPITULO 4 - COMPONENTES TECNICOS
+         ============================================================ -->
+    <div id="cap4" class="section">
+      <h1>4. Componentes T&eacute;cnicos</h1>
+      <p class="chapter-intro">Detalle de cada componente del stack tecnol&oacute;gico.</p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Componente</th>
+            <th>Funci&oacute;n</th>
+            <th>Requisito</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Ollama</strong></td>
+            <td>Motor LLM local</td>
+            <td><span class="badge badge-done">Ya instalado</span></td>
+          </tr>
+          <tr>
+            <td><strong>nomic-embed-text</strong></td>
+            <td>Modelo de embeddings (vectorizaci&oacute;n)</td>
+            <td>~300 MB, descargar con <code>ollama pull</code></td>
+          </tr>
+          <tr>
+            <td><strong>Open WebUI</strong></td>
+            <td>Interfaz web + motor RAG</td>
+            <td>Docker (imagen ~1 GB)</td>
+          </tr>
+          <tr>
+            <td><strong>ChromaDB</strong></td>
+            <td>Base de datos vectorial</td>
+            <td>Incluido en Open WebUI</td>
+          </tr>
+          <tr>
+            <td><strong>Docker Desktop</strong></td>
+            <td>Contenedores de servicios</td>
+            <td>Instalar si no existe</td>
+          </tr>
+          <tr>
+            <td><strong>NAS Synology</strong></td>
+            <td>Almacenamiento de documentos fuente</td>
+            <td><span class="badge badge-done">IP fija, ya disponible</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <hr>
+
+    <!-- ============================================================
+         CAPITULO 5 - ESTRUCTURA DE CONOCIMIENTO
+         ============================================================ -->
+    <div id="cap5" class="section">
+      <h1>5. Estructura de Conocimiento</h1>
+      <p class="chapter-intro">Las 10 colecciones que forman la base de conocimiento de la Wiki.</p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Colecci&oacute;n</th>
+            <th>Descripci&oacute;n</th>
+            <th>Fuentes</th>
+            <th>Nivel</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>ENS</strong></td>
+            <td>Esquema Nacional de Seguridad: gu&iacute;as CCN, controles, pol&iacute;ticas</td>
+            <td>CCN-CERT, BOE, plantillas internas</td>
+            <td><span class="badge badge-public">P&uacute;blico</span></td>
+          </tr>
+          <tr>
+            <td><strong>ISO 27001</strong></td>
+            <td>Sistema de Gesti&oacute;n de Seguridad de la Informaci&oacute;n</td>
+            <td>Norma ISO, controles Anexo A, procedimientos</td>
+            <td><span class="badge badge-public">P&uacute;blico</span></td>
+          </tr>
+          <tr>
+            <td><strong>LOPD-RGPD</strong></td>
+            <td>Protecci&oacute;n de datos y privacidad</td>
+            <td>AEPD, RGPD, LOPDGDD, gu&iacute;as</td>
+            <td><span class="badge badge-public">P&uacute;blico</span></td>
+          </tr>
+          <tr>
+            <td><strong>NIS2</strong></td>
+            <td>Directiva europea de ciberseguridad</td>
+            <td>ENISA, transposici&oacute;n espa&ntilde;ola, gu&iacute;as</td>
+            <td><span class="badge badge-public">P&uacute;blico</span></td>
+          </tr>
+          <tr>
+            <td><strong>Legislaci&oacute;n</strong></td>
+            <td>Normativa vigente monitorizada (BOE, DOGC)</td>
+            <td>BOE, DOGC, DOUE</td>
+            <td><span class="badge badge-public">P&uacute;blico</span></td>
+          </tr>
+          <tr>
+            <td><strong>Licitaciones</strong></td>
+            <td>Pliegos, criterios, seguimiento de licitaciones</td>
+            <td>Plataforma contrataci&oacute;n, documentos internos</td>
+            <td><span class="badge badge-private">Privado</span></td>
+          </tr>
+          <tr>
+            <td><strong>Logs-SIEM</strong></td>
+            <td>An&aacute;lisis de logs y correlaci&oacute;n pre-SIEM</td>
+            <td>Wazuh, logs de clientes, reglas</td>
+            <td><span class="badge badge-private">Privado</span></td>
+          </tr>
+          <tr>
+            <td><strong>Actas</strong></td>
+            <td>Actas de reuniones con clientes y seguimiento</td>
+            <td>Documentos internos CODANOR</td>
+            <td><span class="badge badge-private">Privado</span></td>
+          </tr>
+          <tr>
+            <td><strong>Plantillas</strong></td>
+            <td>Plantillas ENS, ISO, LOPD reutilizables</td>
+            <td>Plantillas internas CODANOR</td>
+            <td><span class="badge badge-private">Privado</span></td>
+          </tr>
+          <tr>
+            <td><strong>OSINT</strong></td>
+            <td>Inteligencia de fuentes abiertas sobre ciberseguridad</td>
+            <td>INCIBE, CCN, ENISA, NIST, feeds RSS</td>
+            <td><span class="badge badge-public">P&uacute;blico</span></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="alert alert-warning">
+        <div class="alert-title">Importante</div>
+        Las colecciones marcadas como <strong>PRIVADO</strong> contienen datos de clientes y deben permanecer exclusivamente en el NAS local. Nunca subir a servicios cloud.
+      </div>
+    </div>
+
+    <hr>
+
+    <!-- ============================================================
+         CAPITULO 6 - SEGURIDAD Y RGPD
+         ============================================================ -->
+    <div id="cap6" class="section">
+      <h1>6. Seguridad y RGPD</h1>
+      <p class="chapter-intro">Medidas de protecci&oacute;n de datos y cumplimiento normativo.</p>
+
+      <h3>Separaci&oacute;n PRIVADO / P&Uacute;BLICO</h3>
+      <p>El NAS Synology mantiene dos &aacute;reas separadas f&iacute;sicamente en carpetas compartidas distintas. Los documentos con datos de clientes se almacenan exclusivamente en la zona <strong>PRIVADO</strong>, con permisos restringidos.</p>
+
+      <h3>Principios de seguridad</h3>
+      <ul>
+        <li><strong>Datos de clientes NUNCA salen del hardware</strong> &mdash; todo el procesamiento ocurre entre el NAS local y el Mac.</li>
+        <li><strong>Vectores locales</strong> &mdash; ChromaDB se ejecuta dentro del contenedor Docker en el Mac. Los embeddings no se transmiten a ning&uacute;n servicio externo.</li>
+        <li><strong>Normativas p&uacute;blicas</strong> &mdash; opcionalmente pueden respaldarse en Google Drive como backup, ya que son documentos de acceso p&uacute;blico.</li>
+        <li><strong>Sin telemetr&iacute;a</strong> &mdash; ni Ollama ni Open WebUI env&iacute;an datos de uso a terceros.</li>
+        <li><strong>Sin APIs externas</strong> &mdash; el sistema no depende de OpenAI, Anthropic u otros proveedores cloud.</li>
+        <li><strong>Sin cloud</strong> &mdash; toda la infraestructura es on-premise.</li>
+      </ul>
+
+      <div class="alert alert-danger">
+        <div class="alert-title">Datos de clientes</div>
+        Bajo ninguna circunstancia se deben subir actas de reuni&oacute;n, logs de clientes o plantillas con datos personales a servicios en la nube. Esto incluye Google Drive, OneDrive y cualquier otro servicio de almacenamiento externo.
+      </div>
+    </div>
+
+    <hr>
+
+    <!-- ============================================================
+         CAPITULO 7 - FUENTES OSINT
+         ============================================================ -->
+    <div id="cap7" class="section">
+      <h1>7. Fuentes OSINT</h1>
+      <p class="chapter-intro">Fuentes p&uacute;blicas de inteligencia que alimentan la base de conocimiento.</p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Fuente</th>
+            <th>URL</th>
+            <th>Contenido</th>
+            <th>Frecuencia</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>INCIBE-CERT</strong></td>
+            <td><a href="https://www.incibe.es/incibe-cert" target="_blank" rel="noopener noreferrer">incibe.es</a></td>
+            <td>Avisos de seguridad, vulnerabilidades</td>
+            <td>Semanal</td>
+          </tr>
+          <tr>
+            <td><strong>CCN-CERT</strong></td>
+            <td><a href="https://www.ccn-cert.cni.es" target="_blank" rel="noopener noreferrer">ccn-cert.cni.es</a></td>
+            <td>Gu&iacute;as STIC, alertas, ENS</td>
+            <td>Semanal</td>
+          </tr>
+          <tr>
+            <td><strong>AEPD</strong></td>
+            <td><a href="https://www.aepd.es" target="_blank" rel="noopener noreferrer">aepd.es</a></td>
+            <td>Resoluciones, gu&iacute;as RGPD</td>
+            <td>Mensual</td>
+          </tr>
+          <tr>
+            <td><strong>ENISA</strong></td>
+            <td><a href="https://www.enisa.europa.eu" target="_blank" rel="noopener noreferrer">enisa.europa.eu</a></td>
+            <td>Informes, marcos NIS2, amenazas</td>
+            <td>Mensual</td>
+          </tr>
+          <tr>
+            <td><strong>BOE</strong></td>
+            <td><a href="https://www.boe.es" target="_blank" rel="noopener noreferrer">boe.es</a></td>
+            <td>Legislaci&oacute;n estatal vigente</td>
+            <td>Diaria</td>
+          </tr>
+          <tr>
+            <td><strong>DOGC</strong></td>
+            <td><a href="https://dogc.gencat.cat" target="_blank" rel="noopener noreferrer">dogc.gencat.cat</a></td>
+            <td>Normativa auton&oacute;mica Catalunya</td>
+            <td>Diaria</td>
+          </tr>
+          <tr>
+            <td><strong>NIST</strong></td>
+            <td><a href="https://www.nist.gov/cyberframework" target="_blank" rel="noopener noreferrer">nist.gov</a></td>
+            <td>Framework ciberseguridad, SP 800</td>
+            <td>Trimestral</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <hr>
+
+    <!-- ============================================================
+         CAPITULO 8 - REQUISITOS E INFRAESTRUCTURA
+         ============================================================ -->
+    <div id="cap8" class="section">
+      <h1>8. Requisitos e Infraestructura</h1>
+      <p class="chapter-intro">Hardware, software y espacio necesario para desplegar el sistema.</p>
+
+      <h3>Hardware</h3>
+      <div class="card-grid">
+        <div class="card">
+          <h4>Mac (Motor de inferencia)</h4>
+          <p>Apple Silicon &bull; 733 GB libres &bull; Ejecuta Ollama, Docker, ChromaDB</p>
+        </div>
+        <div class="card">
+          <h4>NAS Synology</h4>
+          <p>IP fija en red local &bull; Almacena todos los documentos fuente &bull; RAID + Hyper Backup</p>
+        </div>
+      </div>
+
+      <h3>Software</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Software</th>
+            <th>Estado</th>
+            <th>Acci&oacute;n</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Ollama</td>
+            <td><span class="badge badge-done">Instalado</span></td>
+            <td>Ninguna</td>
+          </tr>
+          <tr>
+            <td>Docker Desktop</td>
+            <td>Pendiente verificar</td>
+            <td>Instalar si no existe</td>
+          </tr>
+          <tr>
+            <td>Python 3</td>
+            <td><span class="badge badge-done">Instalado</span></td>
+            <td>Ninguna</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>Espacio estimado en Mac</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Elemento</th>
+            <th>Espacio</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>nomic-embed-text (modelo embeddings)</td><td>~300 MB</td></tr>
+          <tr><td>Open WebUI (imagen Docker)</td><td>~1 GB</td></tr>
+          <tr><td>ChromaDB (vectores generados)</td><td>Variable (~50-200 MB)</td></tr>
+          <tr><td><strong>Total estimado</strong></td><td><strong>~1.3 GB</strong></td></tr>
+        </tbody>
+      </table>
+
+      <div class="alert alert-success">
+        <div class="alert-title">Documentos en NAS</div>
+        Los documentos fuente se almacenan exclusivamente en el NAS. No ocupan espacio adicional en el Mac. Se acceden mediante punto de montaje SMB/NFS.
+      </div>
+    </div>
+
+    <hr>
+
+    <!-- ============================================================
+         CAPITULO 9 - PLAN DE IMPLEMENTACION
+         ============================================================ -->
+    <div id="cap9" class="section">
+      <h1>9. Plan de Implementaci&oacute;n</h1>
+      <p class="chapter-intro">Fases del despliegue, desde la preparaci&oacute;n del NAS hasta la integraci&oacute;n con OpenCode.</p>
+
+      <h2>Fase 0 &mdash; Preparar NAS <span class="badge badge-done">~10 min</span></h2>
+      <ol>
+        <li>Crear carpeta compartida <code>wiki_codanor</code> en el NAS Synology.</li>
+        <li>Crear estructura de subcarpetas: <code>PRIVADO/</code> y <code>PUBLICO/</code> con las 10 colecciones.</li>
+        <li>Montar la carpeta en el Mac: <code>mount_smbfs</code>.</li>
+      </ol>
+      <pre><code># Crear punto de montaje y conectar
+sudo mkdir -p /Volumes/wiki_codanor
+mount_smbfs //usuario@IP_NAS/wiki_codanor /Volumes/wiki_codanor</code></pre>
+
+      <h2>Fase 1 &mdash; Instalar motor <span class="badge badge-done">~30 min</span></h2>
+      <ol>
+        <li>Descargar el modelo de embeddings:</li>
+      </ol>
+      <pre><code>ollama pull nomic-embed-text</code></pre>
+      <ol start="2">
+        <li>Levantar Open WebUI con Docker Compose:</li>
+      </ol>
+      <pre><code># docker-compose.yml
+services:
+  open-webui:
+    image: ghcr.io/open-webui/open-webui:main
+    ports:
+      - "3000:8080"
+    volumes:
+      - open-webui:/app/backend/data
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    restart: unless-stopped
+
+volumes:
+  open-webui:</code></pre>
+      <pre><code>docker compose up -d</code></pre>
+      <ol start="3">
+        <li>Acceder a <code>http://localhost:3000</code> y crear cuenta de administrador.</li>
+      </ol>
+
+      <h2>Fase 2 &mdash; Primera carga <span class="badge badge-future">1-2 horas</span></h2>
+      <ol>
+        <li>En Open WebUI &rarr; <strong>Knowledge</strong> &rarr; crear las Knowledge Bases (una por colecci&oacute;n).</li>
+        <li>Subir documentos desde el NAS montado (drag &amp; drop).</li>
+        <li>Probar consultas: <em>&ldquo;&iquest;Qu&eacute; controles del ENS aplican a sistemas de categor&iacute;a MEDIA?&rdquo;</em></li>
+      </ol>
+
+      <div class="alert alert-info">
+        <div class="alert-title">Consejo</div>
+        Empezar con la colecci&oacute;n ENS o LOPD-RGPD (menor volumen de documentos) para validar el flujo completo antes de cargar todas las colecciones.
+      </div>
+
+      <h2>Fase 3 &mdash; Automatizaci&oacute;n <span class="badge badge-future">Futura</span></h2>
+      <ul>
+        <li>Scripts de ingesti&oacute;n autom&aacute;tica desde NAS (<code>ingest_nas.py</code>).</li>
+        <li>Descarga peri&oacute;dica de fuentes OSINT (<code>fetch_osint.py</code>).</li>
+        <li>Vinculaci&oacute;n bidireccional con herramientas de seguimiento de proyectos.</li>
+      </ul>
+
+      <h2>Fase 4 &mdash; Integraci&oacute;n MCP <span class="badge badge-future">Futura</span></h2>
+      <ul>
+        <li>Conectar la Wiki con OpenCode mediante protocolo MCP (Model Context Protocol).</li>
+        <li>Permitir a OpenCode consultar la base de conocimiento directamente desde el terminal.</li>
+        <li>Crear herramientas MCP personalizadas para cada colecci&oacute;n.</li>
+      </ul>
+    </div>
+
+    <hr>
+
+    <!-- ============================================================
+         CAPITULO 10 - VINCULACION CON PROYECTOS
+         ============================================================ -->
+    <div id="cap10" class="section">
+      <h1>10. Vinculaci&oacute;n con Proyectos Existentes</h1>
+      <p class="chapter-intro">C&oacute;mo cada proyecto CODANOR se conecta bidireccionalmente con la Wiki.</p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Proyecto</th>
+            <th>Alimenta a la Wiki</th>
+            <th>Consulta de la Wiki</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Gesti&oacute;n Riesgos ENS</strong></td>
+            <td>Controles aplicados, evaluaciones de riesgo</td>
+            <td>Gu&iacute;as CCN-STIC, cat&aacute;logo de medidas</td>
+          </tr>
+          <tr>
+            <td><strong>Gesti&oacute;n Riesgos ISO 27001</strong></td>
+            <td>Declaraci&oacute;n aplicabilidad, no conformidades</td>
+            <td>Controles Anexo A, buenas pr&aacute;cticas</td>
+          </tr>
+          <tr>
+            <td><strong>Gesti&oacute;n Riesgos LOPD-RGPD</strong></td>
+            <td>EIPD, registros de actividades</td>
+            <td>Resoluciones AEPD, art&iacute;culos RGPD</td>
+          </tr>
+          <tr>
+            <td><strong>Legislaci&oacute;n Monitor</strong></td>
+            <td>Normativas nuevas descargadas (BOE, DOGC)</td>
+            <td>Hist&oacute;rico legislativo, texto consolidado</td>
+          </tr>
+          <tr>
+            <td><strong>Seguimiento Licitaciones</strong></td>
+            <td>Pliegos, criterios de valoraci&oacute;n</td>
+            <td>Normativa de contrataci&oacute;n, requisitos t&eacute;cnicos</td>
+          </tr>
+          <tr>
+            <td><strong>An&aacute;lisis Logs Pre-SIEM</strong></td>
+            <td>Reglas de correlaci&oacute;n, patrones detectados</td>
+            <td>Alertas INCIBE, firmas CVE, gu&iacute;as Wazuh</td>
+          </tr>
+          <tr>
+            <td><strong>Seguimiento Actas</strong></td>
+            <td>Actas de reuni&oacute;n, compromisos acordados</td>
+            <td>Contexto de cliente, decisiones previas</td>
+          </tr>
+          <tr>
+            <td><strong>Plantillas ENS/ISO</strong></td>
+            <td>Plantillas actualizadas, versiones</td>
+            <td>Requisitos normativos para cada plantilla</td>
+          </tr>
+          <tr>
+            <td><strong>Plataforma OpenCode</strong></td>
+            <td>Configuraciones, hooks, scripts desarrollados</td>
+            <td>Base de conocimiento completa (v&iacute;a MCP futuro)</td>
+          </tr>
+          <tr>
+            <td><strong>Planificaci&oacute;n Diaria</strong></td>
+            <td>Tareas completadas, hitos alcanzados</td>
+            <td>Prioridades pendientes, contexto de proyectos</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <hr>
+
+    <!-- ============================================================
+         CAPITULO 11 - MANTENIMIENTO
+         ============================================================ -->
+    <div id="cap11" class="section">
+      <h1>11. Mantenimiento y Actualizaci&oacute;n</h1>
+      <p class="chapter-intro">Procedimientos para mantener la base de conocimiento actualizada.</p>
+
+      <h3>A&ntilde;adir documentos</h3>
+      <p>Desde Open WebUI, usar <strong>drag &amp; drop</strong> para subir nuevos ficheros. Los documentos deben estar previamente almacenados en el NAS montado en <code>/Volumes/wiki_codanor/</code>.</p>
+
+      <h3>Re-ingesti&oacute;n</h3>
+      <p>Cuando un documento existente se modifica (ej. nueva versi&oacute;n de una plantilla), eliminar la versi&oacute;n anterior de la Knowledge Base y volver a subirla. Los vectores antiguos se reemplazan autom&aacute;ticamente.</p>
+
+      <h3>Actualizaci&oacute;n OSINT</h3>
+      <p>Ejecutar peri&oacute;dicamente el script de descarga:</p>
+      <pre><code>python3 fetch_osint.py --output /Volumes/wiki_codanor/PUBLICO/OSINT/</code></pre>
+
+      <h3>Backup</h3>
+      <p>El NAS Synology dispone de su propio sistema de backup (RAID + Hyper Backup). Los vectores en ChromaDB pueden respaldarse copiando el volumen Docker:</p>
+      <pre><code>docker cp open-webui:/app/backend/data ./backup_open_webui_$(date +%Y%m%d)</code></pre>
+
+      <h3>Actualizar Open WebUI</h3>
+      <pre><code>docker compose pull &amp;&amp; docker compose up -d</code></pre>
+
+      <div class="alert alert-warning">
+        <div class="alert-title">Antes de actualizar</div>
+        Realizar siempre un backup del volumen Docker antes de actualizar Open WebUI a una nueva versi&oacute;n.
+      </div>
+    </div>
+
+    <hr>
+
+    <!-- ============================================================
+         CAPITULO 12 - ANEXO: COMANDOS
+         ============================================================ -->
+    <div id="cap12" class="section">
+      <h1>12. Anexo: Comandos de Referencia</h1>
+      <p class="chapter-intro">Referencia r&aacute;pida de todos los comandos necesarios para operar el sistema.</p>
+
+      <h3>Docker</h3>
+      <table>
+        <thead>
+          <tr><th>Comando</th><th>Descripci&oacute;n</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>docker compose up -d</code></td><td>Levantar servicios en segundo plano</td></tr>
+          <tr><td><code>docker compose down</code></td><td>Detener y eliminar contenedores</td></tr>
+          <tr><td><code>docker compose logs -f</code></td><td>Ver logs en tiempo real</td></tr>
+          <tr><td><code>docker compose pull</code></td><td>Descargar &uacute;ltimas im&aacute;genes</td></tr>
+          <tr><td><code>docker compose ps</code></td><td>Ver estado de contenedores</td></tr>
+        </tbody>
+      </table>
+
+      <h3>Ollama</h3>
+      <table>
+        <thead>
+          <tr><th>Comando</th><th>Descripci&oacute;n</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>ollama pull nomic-embed-text</code></td><td>Descargar modelo de embeddings</td></tr>
+          <tr><td><code>ollama list</code></td><td>Listar modelos instalados</td></tr>
+          <tr><td><code>ollama run &lt;modelo&gt;</code></td><td>Ejecutar un modelo interactivamente</td></tr>
+          <tr><td><code>ollama ps</code></td><td>Ver modelos en ejecuci&oacute;n</td></tr>
+        </tbody>
+      </table>
+
+      <h3>NAS / Montaje</h3>
+      <table>
+        <thead>
+          <tr><th>Comando</th><th>Descripci&oacute;n</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>sudo mkdir -p /Volumes/wiki_codanor</code></td><td>Crear punto de montaje</td></tr>
+          <tr><td><code>mount_smbfs //user@IP/wiki_codanor /Volumes/wiki_codanor</code></td><td>Montar carpeta compartida del NAS</td></tr>
+          <tr><td><code>ls /Volumes/wiki_codanor/</code></td><td>Verificar montaje</td></tr>
+          <tr><td><code>umount /Volumes/wiki_codanor</code></td><td>Desmontar carpeta</td></tr>
+        </tbody>
+      </table>
+
+      <h3>Scripts del proyecto</h3>
+      <table>
+        <thead>
+          <tr><th>Script</th><th>Descripci&oacute;n</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>setup_nas_folders.sh</code></td><td>Crea la estructura de carpetas en el NAS (10 colecciones)</td></tr>
+          <tr><td><code>ingest_nas.py</code></td><td>Ingesta autom&aacute;tica de documentos desde NAS a Open WebUI</td></tr>
+          <tr><td><code>fetch_osint.py</code></td><td>Descarga peri&oacute;dica de fuentes OSINT p&uacute;blicas</td></tr>
+        </tbody>
+      </table>
+
+      <h3>Open WebUI</h3>
+      <table>
+        <thead>
+          <tr><th>Recurso</th><th>Detalle</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>URL de acceso</td><td><code>http://localhost:3000</code></td></tr>
+          <tr><td>Configuraci&oacute;n admin</td><td><code>Settings &rarr; Admin &rarr; Connections</code></td></tr>
+          <tr><td>Knowledge Bases</td><td><code>Workspace &rarr; Knowledge</code></td></tr>
+          <tr><td>Modelo embeddings</td><td><code>Settings &rarr; Documents &rarr; Embedding Model: nomic-embed-text</code></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- ===== FOOTER ===== -->
+    <div class="manual-footer">
+      <img src="https://codanor.com/assets/img/logo_web-50.png" alt="Logo CODANOR footer"><br>
+      <p><strong>CODANOR</strong> &mdash; Jafa, S.L. | Consultor&iacute;a Organizativa y Legal | Barcelona, Catalunya</p>
+      <p>Proyecto Wiki CODANOR v1.0 &mdash; 27 de Abril de 2026</p>
+    </div>
+
+  </main>
+</div>
+
+<!-- ===== BOTON EXPORTAR PDF ===== -->
+<button class="btn-print" onclick="window.print()">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+    <path d="M6 9V2h12v7M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/>
+    <rect x="6" y="14" width="12" height="8"/>
+  </svg>
+  Exportar PDF
+</button>
+
+</body>
+</html>
