@@ -51,3 +51,7 @@
 - iCloud NO se usara (causa problemas con Git y OpenCode, ya documentado).
 - Los vectores (ChromaDB) ocupan ~500 MB para miles de documentos. Espacio minimo en Mac.
 - Open WebUI soporta PDF, DOCX, MD, TXT nativamente via drag&drop.
+
+---
+
+> **Revisado 2026-11-13** — sin cambios de código en esta sesión (trabajo centrado en `Plataforma_Seguimiento_Proyectos`).

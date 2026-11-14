@@ -5,3 +5,6 @@ Thumbs.db
 # Office temp / lock files
 ~$*
 .~lock.*
+
+# Base de datos vectorial (embeddings — pesada, no versionar)
+vectordb/
